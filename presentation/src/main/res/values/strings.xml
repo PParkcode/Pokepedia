@@ -1,0 +1,5 @@
+<resources>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_pokemon_cover">PokemonCover</string>
+    <string name="title_activity_image_loader">ImageLoader</string>
+</resources>

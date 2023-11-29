@@ -16,5 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "Pokepedia"
 include(":app")
 include(":data")
-include(":presentation")
 include(":domain")
+include(":presentation")
