@@ -12,13 +12,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPokemonsUsecase: GetPokemonsUsecase
-): ViewModel() {
+) : ViewModel() {
+
     var offset by mutableStateOf(0)
     var limit by mutableStateOf(20)
-    var pokemons : MutableList<PokemonCover> by mutableStateOf(mutableListOf())
+    var pokemons by mutableStateOf<List<PokemonCover>>(emptyList())
 
     suspend fun getPokemons() {
-        val pokemonResponse = getPokemonsUsecase.invoke(offset,limit)
+        val pokemonResponse = getPokemonsUsecase.invoke(offset, limit)
         pokemons += pokemonResponse.pokemons.toMutableList()
         offset = pokemonResponse.nextOffset
         limit = pokemonResponse.nextLimit
