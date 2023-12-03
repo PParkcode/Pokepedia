@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -45,18 +46,15 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    //hilt
+    // hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    //Retrofit
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
-    //Moshi
+    // Moshi
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
-
-
-
+    implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
 }

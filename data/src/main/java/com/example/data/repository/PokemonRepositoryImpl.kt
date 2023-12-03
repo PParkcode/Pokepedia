@@ -8,6 +8,10 @@ import com.example.data.model.PokemonResponse
 import com.example.domain.model.PokemonCover
 import com.example.domain.model.PokemonList
 import com.example.domain.repository.PokemonRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,32 +19,42 @@ import javax.inject.Singleton
 internal class PokemonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource
 ) : PokemonRepository {
-    override suspend fun getPokemons(offset:Int, limit:Int): PokemonList {
-        val pokemonResponse = remoteDataSource.getPokemons(offset,limit)
+    override suspend fun getPokemons(offset: Int, limit: Int): Flow<PokemonList> {
+        Log.d("확인", "데이터소스")
+        val pokemonResponse = remoteDataSource.getPokemons(offset, limit)
+        val pokemonListFlow = pokemonResponse.map {
+            Log.d("확인", "데이터 소스 $it")
+            toPokemonList(it)
+        }
+        return pokemonListFlow
 
-        return toPokemonList(pokemonResponse)
+        // return toPokemonList(pokemonResponse)
     }
 
-    suspend fun getKoreanName(id:Int):String {
-        val speciesResponse = remoteDataSource.getKoreanName(id)
-        return speciesResponse.names[2].name
+    override suspend fun getKoreanName(id: Int): Flow<String> {
+        val koreanNameFlow = remoteDataSource.getKoreanName(id).map {
+            it.names[2].name
+        }
+        return koreanNameFlow
+
     }
 
-    private suspend fun toPokemonList(pokemonResponse: PokemonResponse): PokemonList {
+    private  fun toPokemonList(pokemonResponse: PokemonResponse): PokemonList {
+        Log.d("확인", "toPokemonList 진입")
         val pokemonList: List<PokemonCover> = pokemonResponse.results.map { it ->
             val id = getId(it)
-            val koreanName = getKoreanName(id)
-            /*
-            toCover(
-                pokemonResult = it
-            )
-             */
-            toCover(id,koreanName)
+            toCover(id, it.name)
         }
+
+        val offsetAndLimit = getOffsetAndLimit(pokemonResponse.next?.split("?")?.last())
+        Log.d("확인", "$pokemonList")
+
+        return PokemonList(offsetAndLimit.first, offsetAndLimit.second, pokemonList)
+    }
+
+    private fun getOffsetAndLimit(query: String?): Pair<Int, Int> {
         var offset = 0
         var limit = 0
-
-        var query = pokemonResponse.next?.split("?")?.last()
         query?.split("&")?.map { it ->
             val parameter = it.split("=")
             if (parameter[0] == "offset") {
@@ -49,11 +63,7 @@ internal class PokemonRepositoryImpl @Inject constructor(
                 limit = parameter[1].toInt()
             }
         }
-        Log.d("확인","offset: ${offset}")
-        Log.d("확인","pokemons: $pokemonList")
-        Log.d("확인","size: ${pokemonList.size}")
-
-
-        return PokemonList(offset, limit, pokemonList)
+        return Pair(offset, limit)
     }
+
 }

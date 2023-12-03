@@ -7,27 +7,32 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.model.PokemonCover
+import com.example.presentation.common.CommonViewModel
 import com.example.presentation.common.PokemonCard
 import com.example.presentation.home.ui.theme.PokepediaTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class HomeActivity : ComponentActivity() {
@@ -49,22 +54,33 @@ class HomeActivity : ComponentActivity() {
 @Composable
 fun SetHomeActivity(viewModel: HomeViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
+    val pokemons by viewModel.pokemons.collectAsState(initial = emptyList())
+
     LaunchedEffect(key1 = Unit) {
         coroutineScope.launch {
             viewModel.getPokemons()
         }
     }
-    PokemonGrid(viewModel.pokemons, { viewModel.getPokemons() }, coroutineScope)
+    PokemonGrid(
+        //viewModel.pokemons,
+        pokemons,
+        { viewModel.getPokemons() },
+        { viewModel.getKoreanName(it) },
+        coroutineScope
+    )
 }
 
 @Composable
 fun PokemonGrid(
-    pokemons: List<PokemonCover>,
+    //pokemonsFlow: Flow<List<PokemonCover>>,
+    pokemons:List<PokemonCover>,
     getPokemons: suspend () -> Unit,
+    getKoreanName: suspend (Int) -> String,
     coroutineScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
     val gridState = rememberLazyGridState()
+//    val pokemons by pokemonsFlow.collectAsState(initial = emptyList())
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -74,39 +90,17 @@ fun PokemonGrid(
         state = gridState,
         modifier = Modifier.padding(7.dp)
     ) {
+        Log.d("확인", "pokemons: $pokemons")
 
         items(pokemons) { pokemon ->
-            PokemonCard(item = pokemon)
+
+            PokemonCard(item = pokemon,  { getKoreanName(it) })
         }
 
-        /*
-
-        if (gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == pokemons.size - 1) {
-
-            // 리스트의 끝에 도달하면 다음 페이지 로드
-            coroutineScope.launch {
-                Log.d("확인","코루틴 스코프 안에 진행")
-                getPokemons()
-            }
-        }
-
-         */
-
-        if (gridState.firstVisibleItemIndex == pokemons.size - 10) {
+        if (gridState.firstVisibleItemIndex == pokemons.size - 50) {
             coroutineScope.launch {
                 getPokemons()
             }
         }
-
-
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PokepediaTheme {
-
     }
 }

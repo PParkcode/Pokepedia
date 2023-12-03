@@ -20,6 +20,7 @@ object NetworkModule {
     val moshi = Moshi.Builder()
         .addLast(KotlinJsonAdapterFactory())
         .build()
+
     @Singleton
     @Provides
     fun provideInstance(): Retrofit {
@@ -32,7 +33,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePokeApiService(retrofit: Retrofit):Api {
+    fun providePokeApiService(retrofit: Retrofit): Api {
         return retrofit.create(Api::class.java)
     }
 }

@@ -12,10 +12,10 @@ interface Api {
     suspend fun getPokemonList(
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = 20
-    ):PokemonResponse
+    ): PokemonResponse
 
     @GET("pokemon-species/{id}")
     suspend fun getKoreanName(
-        @Path("id") id:Int
-    ):SpeciesResponse
+        @Path("id") id: Int
+    ): SpeciesResponse
 }

@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SpeciesResponse(
-    @field:Json(name = "names") val names:List<Name>
+    @field:Json(name = "names") val names: List<Name>
 )

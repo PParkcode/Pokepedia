@@ -3,11 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
     namespace = "com.example.pokepedia"
-    compileSdk = 34 //33 -> 34
+    compileSdk = 34 // 33 -> 34
 
     defaultConfig {
         applicationId = "com.example.pokepedia"
@@ -32,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17 //1_8 -> 17
-        targetCompatibility = JavaVersion.VERSION_17 //1_8 -> 17
+        sourceCompatibility = JavaVersion.VERSION_17 // 1_8 -> 17
+        targetCompatibility = JavaVersion.VERSION_17 // 1_8 -> 17
     }
     kotlinOptions {
-        jvmTarget = "17" //1.8 ->17
+        jvmTarget = "17" // 1.8 ->17
     }
     buildFeatures {
         compose = true
@@ -75,7 +76,4 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-
-
-
 }

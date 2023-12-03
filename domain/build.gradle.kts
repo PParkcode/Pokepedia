@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -43,7 +44,4 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("javax.inject:javax.inject:1")
-
-
-
 }
