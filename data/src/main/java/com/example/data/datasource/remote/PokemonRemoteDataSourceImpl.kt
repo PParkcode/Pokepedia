@@ -32,6 +32,8 @@ class PokemonRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getPokemonType(url:String):Flow<NamesResponse> = flow {
-        emit(client.getType(url))
+        val a= client.getType(url)
+        Log.d("확인","type 응답" + a.names)
+        emit(a)
     }
 }

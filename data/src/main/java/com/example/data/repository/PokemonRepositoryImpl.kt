@@ -8,6 +8,7 @@ import com.example.data.mapper.toCover
 import com.example.data.mapper.toPokemonFlavorText
 import com.example.data.mapper.toPokemonList
 import com.example.data.model.FlavorTextEntry
+import com.example.data.model.Name
 import com.example.data.model.PokemonInfoResponse
 import com.example.data.model.PokemonResponse
 import com.example.domain.model.PokemonCover
@@ -18,10 +19,17 @@ import com.example.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,20 +64,22 @@ internal class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun getPokemonTypes(id: Int): Flow<List<String>> {
         val pokemonInfo: Flow<PokemonInfoResponse> = remoteDataSource.getPokemonInfo(id)
-        val pokemonTypes = mutableListOf<String>()
-
-        val pokemonTypesFlow = pokemonInfo.map { response ->
-            val aaa = response.types.map {
-                val a = remoteDataSource.getPokemonType(it.type.url).transform { nameResponse ->
-                    var names = nameResponse.names.first { name ->
-                        name.language.name == "ko"
-                    }.name
-                    emit(names)
-
+        Log.d("확인", "getPokemonTypes")
+        val pokemonTypesFlow: Flow<List<String>> = pokemonInfo.flatMapConcat { response ->
+            flow {
+                val namesList = mutableListOf<String>()
+                response.types.forEach { type ->
+                    val name = remoteDataSource.getPokemonType(type.type.url).map {
+                        it.names.first { name ->
+                            name.language.name == "ko"
+                        }.name
+                    }
+                    namesList += name.first()
                 }
+                emit(namesList)
             }
         }
-        return flowOf(listOf(" ", " ", " "))
+        return pokemonTypesFlow
     }
 
     override suspend fun getPokemonFlavorText(id: Int): Flow<PokemonFlavorText> {

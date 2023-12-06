@@ -6,28 +6,29 @@ import com.example.data.model.PokemonInfoResponse
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonPhysical
 import com.example.domain.model.PokemonStats
+import com.example.domain.model.Stat
 
 
 inline fun getPokemonPhysical(pokemonResponse: PokemonInfoResponse): PokemonPhysical {
 
     var height = pokemonResponse.height.toString()
     var weight = pokemonResponse.weight.toString()
-    val modifiedHeight = if(height.length == 1) {
+    val modifiedHeight = if (height.length == 1) {
         "0.$height"
     } else {
         StringBuilder(height).insert(height.length - 1, ".").toString()
     }
 
-    val modifiedWeight = if(weight.length == 1) {
+    val modifiedWeight = if (weight.length == 1) {
         "0.$weight"
     } else {
         StringBuilder(weight).insert(weight.length - 1, ".").toString()
     }
-    return PokemonPhysical(modifiedHeight,modifiedWeight)
+    return PokemonPhysical(modifiedHeight, modifiedWeight)
 
 }
-fun getPokemonStats(pokemonResponse: PokemonInfoResponse):PokemonStats {
-    Log.d("확인","응답" + pokemonResponse.stats)
+
+fun getPokemonStats(pokemonResponse: PokemonInfoResponse): PokemonStats {
     var hp = 0
     var attack = 0
     var defense = 0
@@ -36,7 +37,6 @@ fun getPokemonStats(pokemonResponse: PokemonInfoResponse):PokemonStats {
     var speed = 0
 
     for (item in pokemonResponse.stats) {
-        Log.d("확인",item.stat.name + item.baseStat)
         when (item.stat.name) {
             "hp" -> {
                 hp = item.baseStat
@@ -65,13 +65,13 @@ fun getPokemonStats(pokemonResponse: PokemonInfoResponse):PokemonStats {
     }
     var height = pokemonResponse.height.toString()
     var weight = pokemonResponse.weight.toString()
-    val modifiedHeight = if(height.length == 1) {
+    val modifiedHeight = if (height.length == 1) {
         "0.$height"
     } else {
         StringBuilder(height).insert(height.length - 1, ".").toString()
     }
 
-    val modifiedWeight = if(weight.length == 1) {
+    val modifiedWeight = if (weight.length == 1) {
         "0.$weight"
     } else {
         StringBuilder(weight).insert(weight.length - 1, ".").toString()
@@ -81,12 +81,12 @@ fun getPokemonStats(pokemonResponse: PokemonInfoResponse):PokemonStats {
     return PokemonStats(
         height = modifiedHeight,
         weight = modifiedWeight,
-        hp = hp,
-        atk = attack,
-        def = defense,
-        specialAtk = specialAtk,
-        specialDef = specialDef,
-        speed = speed
+        hp = Stat("HP", hp,0xFFFF0000),
+        atk = Stat("ATK", attack,0xFFF08030),
+        def = Stat("DEF", defense,0xFFF8D030),
+        specialAtk = Stat("SP-ATK", specialAtk,0xFF6890F0),
+        specialDef = Stat("SP-DEF", specialDef,0xFF78C850),
+        speed = Stat("SPD", speed,0xFFF85888)
     )
 }
 
@@ -95,6 +95,6 @@ fun getPokemonTypes(response: PokemonInfoResponse) {
 }
 
 
-inline fun toPokemonFlavorText(flavorTextEntry:FlavorTextEntry):PokemonFlavorText {
+inline fun toPokemonFlavorText(flavorTextEntry: FlavorTextEntry): PokemonFlavorText {
     return PokemonFlavorText(flavorTextEntry.flavorText)
 }
