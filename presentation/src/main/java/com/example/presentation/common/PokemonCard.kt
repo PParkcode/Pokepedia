@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 fun PokemonCard(
     item: PokemonCover,
     getKoreanName: suspend (Int) -> String,
-    viewModel: CommonViewModel = hiltViewModel()
+    navigateToDetail:(Int,String) ->Unit
 ) {
 
     var pokemonName by remember { mutableStateOf(item.name) }
@@ -60,10 +60,10 @@ fun PokemonCard(
             defaultElevation = 4.dp
         ),
         modifier = Modifier
-            .size(210.dp)
+            .size(230.dp)
             .padding(8.dp)
             .clickable {
-                //Log.d("확인", "${item.id} ${item.name}")
+                navigateToDetail(item.id,item.name)
             }
 
     ) {

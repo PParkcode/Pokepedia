@@ -3,6 +3,7 @@ package com.example.presentation.home
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -22,14 +23,14 @@ class HomeViewModel @Inject constructor(
     private val getKoreanNameUsecase: GetKoreanNameUsecase
 ) : ViewModel() {
 
-    var offset by mutableStateOf(0)
-    var limit by mutableStateOf(60)
+    private var offset by mutableIntStateOf(0)
+    private var limit by mutableIntStateOf(60)
 
     private var _pokemons = MutableStateFlow<List<PokemonCover>>(emptyList())
     var pokemons = _pokemons.asStateFlow()
 
     suspend fun getPokemons() {
-        getPokemonsUsecase.invoke(offset, limit).collect {
+        getPokemonsUsecase(offset,limit).collect {
 
             _pokemons.value += it.pokemons
             offset = it.nextOffset
@@ -39,9 +40,7 @@ class HomeViewModel @Inject constructor(
 
     suspend fun getKoreanName(id: Int):String {
         getKoreanNameUsecase.invoke(id).collect {
-            Log.d("확인", it)
             _pokemons.value[id - 1].name = it
-
         }
         return _pokemons.value[id -1 ].name
     }

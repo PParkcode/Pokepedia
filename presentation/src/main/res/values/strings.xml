@@ -2,4 +2,7 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_pokemon_cover">PokemonCover</string>
     <string name="title_activity_image_loader">ImageLoader</string>
+    <string name="title_activity_main_screen">MainScreen</string>
+    <string name="title_activity_set_detail">SetDetailActivity</string>
+    <string name="title_activity_detail">DetailActivity</string>
 </resources>

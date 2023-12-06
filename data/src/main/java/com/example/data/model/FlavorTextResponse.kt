@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Name(
-    @field:Json(name = "name") val name: String,
-    @field:Json(name = "language") val language:CommonForm
+data class FlavorTextResponse(
+    @Json(name = "flavor_text_entries")
+    val flavorTextEntries: List<FlavorTextEntry>
 )

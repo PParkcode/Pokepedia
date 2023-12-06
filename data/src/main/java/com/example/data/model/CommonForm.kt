@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SpeciesResponse(
-    @field:Json(name = "names") val names: List<Name>
+data class CommonForm(
+    @Json(name = "name") val name: String,
+    @Json(name = "url") val url: String
 )

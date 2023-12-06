@@ -52,7 +52,10 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-fun SetHomeActivity(viewModel: HomeViewModel = hiltViewModel()) {
+fun SetHomeActivity(
+    navigateToDetail: (Int, String) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val coroutineScope = rememberCoroutineScope()
     val pokemons by viewModel.pokemons.collectAsState(initial = emptyList())
 
@@ -66,21 +69,21 @@ fun SetHomeActivity(viewModel: HomeViewModel = hiltViewModel()) {
         pokemons,
         { viewModel.getPokemons() },
         { viewModel.getKoreanName(it) },
+        { id, name -> navigateToDetail(id, name) },
         coroutineScope
     )
 }
 
 @Composable
 fun PokemonGrid(
-    //pokemonsFlow: Flow<List<PokemonCover>>,
-    pokemons:List<PokemonCover>,
+    pokemons: List<PokemonCover>,
     getPokemons: suspend () -> Unit,
     getKoreanName: suspend (Int) -> String,
+    navigateToDetail: (Int, String) -> Unit,
     coroutineScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
     val gridState = rememberLazyGridState()
-//    val pokemons by pokemonsFlow.collectAsState(initial = emptyList())
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -90,11 +93,12 @@ fun PokemonGrid(
         state = gridState,
         modifier = Modifier.padding(7.dp)
     ) {
-        Log.d("확인", "pokemons: $pokemons")
-
         items(pokemons) { pokemon ->
 
-            PokemonCard(item = pokemon,  { getKoreanName(it) })
+            PokemonCard(
+                item = pokemon,
+                { getKoreanName(it) },
+                { id, name -> navigateToDetail(id, name) })
         }
 
         if (gridState.firstVisibleItemIndex == pokemons.size - 50) {

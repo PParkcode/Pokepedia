@@ -10,7 +10,6 @@ class GetPokemonsUsecase @Inject constructor(
     private val repository: PokemonRepository
 ) {
     suspend operator fun invoke(offset:Int,limit:Int): Flow<PokemonList> {
-        Log.d("확인","유스케이스")
         return repository.getPokemons(offset, limit)
     }
 }
