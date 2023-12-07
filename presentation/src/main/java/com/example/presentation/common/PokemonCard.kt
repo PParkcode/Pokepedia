@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,9 @@ fun PokemonCard(
 
     var pokemonName by remember { mutableStateOf(item.name) }
     val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(key1 = item.id) {
+        pokemonName = getKoreanName(item.id)
+    }
 
 
     Card(
@@ -66,15 +70,25 @@ fun PokemonCard(
                 navigateToDetail(item.id,item.name)
             }
 
+
     ) {
-
         Column {
-            ImageLoader(id = item.id)
-            // 이름은 비동기로 가져와서 업데이트
-            LaunchedEffect(key1 = item.id) {
-                pokemonName = getKoreanName(item.id)
+            ImageLoader(id = item.id) {
+                Text(
+                    text = pokemonName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(CenterHorizontally)
+                )
             }
+            // 이름은 비동기로 가져와서 업데이트
 
+
+            /*
             // 이름이 로드되면 텍스트 표시
             Text(
                 text = pokemonName,
@@ -85,6 +99,8 @@ fun PokemonCard(
                     .padding(8.dp)
                     .align(CenterHorizontally)
             )
+
+             */
 
         }
     }

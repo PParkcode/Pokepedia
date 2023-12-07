@@ -1,31 +1,40 @@
 package com.example.presentation.detail
 
 
+import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.EaseInOutCubic
-import androidx.compose.animation.core.EaseOutBack
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,22 +48,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.palette.graphics.Palette
 import com.example.domain.model.PokemonCover
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonStats
+import com.example.domain.model.PokemonType
 import com.example.domain.model.Stat
-import com.example.presentation.common.ImageLoader
-import com.example.presentation.detail.ui.theme.ATKColor
 import com.example.presentation.detail.ui.theme.PokepediaTheme
+import com.skydoves.landscapist.coil.CoilImage
+import com.skydoves.landscapist.palette.BitmapPalette
 import kotlinx.coroutines.launch
 
 
@@ -72,35 +86,45 @@ fun SetDetailActivity(id: Int, name: String, viewModel: DetailViewModel = hiltVi
             viewModel.getPokemonStats(id)
             viewModel.getPokemonTypes(id)
             viewModel.getPokemonFlavorText(id)
-
         }
     }
-
     DetailActivity(pokemon, pokemonStats, pokemonTypes, pokemonFlavorText)
-
 }
 
 @Composable
 fun DetailActivity(
     pokemon: PokemonCover,
     pokemonStats: PokemonStats,
-    pokemonTypes: List<String>,
+    pokemonTypes: List<PokemonType>,
     pokemonFlavorText: PokemonFlavorText,
-    modifier: Modifier = Modifier.padding(start = 15.dp)
+    modifier: Modifier = Modifier.padding(start = 18.dp)
 ) {
 
     LazyColumn {
         item {
             ImageArea(id = pokemon.id)
+
         }
         item {
-            NameArea(name = pokemon.name, modifier)
+            NameAndTypeArea(name = pokemon.name, types = pokemonTypes, modifier)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(5.dp)
+            )
         }
         item {
             PokemonFlavorTextArea(flavorText = pokemonFlavorText.flavorText, modifier)
         }
         item {
-            TypeArea(types = pokemonTypes)
+            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(5.dp)
+                    .background(color = Color(0xFFF0F0F0))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
         }
         item {
             PokemonStatsArea(pokemonStats = pokemonStats, modifier)
@@ -113,6 +137,50 @@ fun DetailActivity(
 
 }
 
+@Composable
+fun ImageArea(id: Int) {
+    var palette by remember { mutableStateOf<Palette?>(null) }
+    var imgUrl =
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
+    val view = LocalView.current
+    val window = (view.context as Activity).window
+    window.statusBarColor = Color(palette?.dominantSwatch?.rgb ?: 0).toArgb()
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(230.dp)
+            .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
+            .background(color = Color(palette?.dominantSwatch?.rgb ?: 0))
+
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "NO.$id",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(top = 7.dp, end = 12.dp)
+                    .align(alignment = Alignment.End)
+            )
+            CoilImage(
+                imageModel = imgUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(10.dp),
+                bitmapPalette = BitmapPalette {
+                    palette = it
+                },
+            )
+
+        }
+
+    }
+}/*
 @Composable
 fun ImageArea(id: Int, modifier: Modifier = Modifier) {
     Box(
@@ -132,24 +200,90 @@ fun ImageArea(id: Int, modifier: Modifier = Modifier) {
                     .padding(top = 7.dp, end = 12.dp)
                     .align(alignment = Alignment.End)
             )
-            ImageLoader(id = id)
+            ImageLoader(id = id, { Text("") })
         }
 
     }
 }
 
+ */
+
+@Composable
+fun NameAndTypeArea(name: String, types: List<PokemonType>, modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
+            .then(modifier)
+
+    ) {
+
+        NameArea(name = name)
+        Spacer(modifier = Modifier.width(8.dp))
+        TypeArea(types = types)
+    }
+}
+
 @Composable
 fun NameArea(name: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.Start, modifier = Modifier
+    Text(
+        text = name,
+        fontWeight = FontWeight.Bold,
+        fontSize = 29.sp,
+
+
+        )
+}
+
+
+@Composable
+fun TypeArea(types: List<PokemonType>, modifier: Modifier = Modifier) {
+    LazyRow(
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier
             .fillMaxWidth()
-            .then(modifier)
+            .padding(start = 10.dp)
+
+
     ) {
+        items(types) { type ->
+            Type(type)
+        }
+    }
+}
+
+@Composable
+fun Type(type: PokemonType, modifier: Modifier = Modifier) {
+    val resources = LocalContext.current.resources
+    val imgName = "${type.type}_type"
+
+    val resourceId = resources.getIdentifier(imgName, "drawable", LocalContext.current.packageName)
+
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .height(IntrinsicSize.Max)
+            .width(IntrinsicSize.Max)
+            .padding(start = 8.dp)
+
+    ) {
+
+        Image(
+            painter = painterResource(id = resourceId),
+            contentDescription = type.type,
+            modifier = Modifier.size(28.dp)
+
+        )
         Text(
-            text = name, fontWeight = FontWeight.Bold, fontSize = 27.sp
+            text = type.koreanType,
+            fontSize = 9.sp,
+            fontWeight = FontWeight.Light,
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 3.dp)
         )
     }
-
 }
 
 @Composable
@@ -159,7 +293,7 @@ fun PokemonFlavorTextArea(flavorText: String, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.Start,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp, end = 15.dp)
+            .padding(top = 8.dp, end = 15.dp)
             .then(modifier)
     ) {
         Text(
@@ -169,37 +303,9 @@ fun PokemonFlavorTextArea(flavorText: String, modifier: Modifier = Modifier) {
 
 }
 
-@Composable
-fun TypeArea(types: List<String>, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .padding(12.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .sizeIn(minWidth = 50.dp, minHeight = 20.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.Gray)
-        ) {
-            Text(
-                text = types.toString(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(7.dp),
-
-                )
-        }
-    }
-}
 
 @Composable
-fun PhysicalArea(weight: String , height: String , modifier: Modifier = Modifier) {
+fun PhysicalArea(weight: String, height: String, modifier: Modifier = Modifier) {
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
 
         Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
@@ -240,18 +346,22 @@ fun PhysicalArea(weight: String , height: String , modifier: Modifier = Modifier
 
 @Composable
 fun PokemonStatsArea(pokemonStats: PokemonStats, modifier: Modifier = Modifier) {
-    Column {
+    Column(
+        modifier = Modifier.padding(top = 8.dp)
+    ) {
         Text(
-            text = "기본 스탯", fontWeight = FontWeight.SemiBold, fontSize = 18.sp,
-            modifier = modifier
+            text = "기본 스탯",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp,
+            modifier = modifier.padding(bottom = 7.dp)
         )
 
-        PokemonStat(pokemonStats.hp, modifier.padding(bottom = 5.dp))
-        PokemonStat(pokemonStats.atk, modifier.padding(bottom = 5.dp))
-        PokemonStat(pokemonStats.def, modifier.padding(bottom = 5.dp))
-        PokemonStat(pokemonStats.specialAtk, modifier.padding(bottom = 5.dp))
-        PokemonStat(pokemonStats.specialDef, modifier.padding(bottom = 5.dp))
-        PokemonStat(pokemonStats.speed, modifier.padding(bottom = 5.dp))
+        PokemonStat(pokemonStats.hp, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.atk, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.def, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.specialAtk, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.specialDef, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.speed, modifier.padding(bottom = 7.dp))
 
 
     }
@@ -275,7 +385,12 @@ fun PokemonStat(stat: Stat, modifier: Modifier = Modifier) {
                 .then(modifier)
 
         )
-        CustomBar(stat = stat, maxStat = 300, Modifier.weight(4f).padding(start = 7.dp))
+        CustomBar(
+            stat = stat, maxStat = 300,
+            Modifier
+                .weight(4f)
+                .padding(start = 7.dp)
+        )
     }
 }
 
@@ -288,8 +403,8 @@ fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
     }
     val size by animateFloatAsState(
         targetValue = progress, animationSpec = tween(
-            durationMillis = 700,
-            delayMillis = 700,
+            durationMillis = 500,
+            delayMillis = 200,
             easing = EaseInOutCubic,
         ), label = ""
     )
@@ -343,18 +458,19 @@ fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
 
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview2() {
+fun Preview4() {
     PokepediaTheme {
-        PokemonFlavorTextArea(flavorText = "태어났을 때부터 등에 이상한 씨앗이 심어져 있으며 몸과 함께 자란다고 한다.")
+        Type(PokemonType("fire", "불꽃"))
     }
 }
 
-@Preview(showBackground = true) 
+@Preview
 @Composable
-fun Preview3() {
+fun Preview5() {
     PokepediaTheme {
-        PokemonStat(stat = Stat("SP-ATK",120,0xFF000011))
+        NameAndTypeArea(name = "리자몽", types = listOf(PokemonType("fire", "불꽃")))
     }
 }

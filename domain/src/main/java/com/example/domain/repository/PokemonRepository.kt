@@ -3,6 +3,7 @@ package com.example.domain.repository
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonList
 import com.example.domain.model.PokemonStats
+import com.example.domain.model.PokemonType
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {
@@ -13,7 +14,7 @@ interface PokemonRepository {
 
     suspend fun getPokemonStats(id: Int):Flow<PokemonStats>
 
-    suspend fun getPokemonTypes(id:Int):Flow<List<String>>
+    suspend fun getPokemonTypes(id:Int):Flow<List<PokemonType>>
 
     suspend fun getPokemonFlavorText(id: Int): Flow<PokemonFlavorText>
 }

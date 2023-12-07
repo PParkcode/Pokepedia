@@ -15,6 +15,7 @@ import com.example.domain.model.PokemonCover
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonList
 import com.example.domain.model.PokemonStats
+import com.example.domain.model.PokemonType
 import com.example.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -62,20 +63,22 @@ internal class PokemonRepositoryImpl @Inject constructor(
         return pokemonInfo.map { getPokemonStats(it) }
     }
 
-    override suspend fun getPokemonTypes(id: Int): Flow<List<String>> {
+    override suspend fun getPokemonTypes(id: Int): Flow<List<PokemonType>> {
         val pokemonInfo: Flow<PokemonInfoResponse> = remoteDataSource.getPokemonInfo(id)
         Log.d("확인", "getPokemonTypes")
-        val pokemonTypesFlow: Flow<List<String>> = pokemonInfo.flatMapConcat { response ->
+        val pokemonTypesFlow: Flow<List<PokemonType>> = pokemonInfo.flatMapConcat { response ->
             flow {
-                val namesList = mutableListOf<String>()
+                val namesList = mutableListOf<PokemonType>()
                 response.types.forEach { type ->
                     val name = remoteDataSource.getPokemonType(type.type.url).map {
                         it.names.first { name ->
                             name.language.name == "ko"
                         }.name
                     }
-                    namesList += name.first()
+
+                    namesList += PokemonType(type.type.name,name.first())
                 }
+
                 emit(namesList)
             }
         }

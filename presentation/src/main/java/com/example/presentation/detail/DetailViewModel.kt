@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.domain.model.PokemonCover
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonStats
+import com.example.domain.model.PokemonType
 import com.example.domain.model.Stat
 import com.example.domain.usecase.GetPokemonFlavorTextUsecase
 import com.example.domain.usecase.GetPokemonStatsUsecase
@@ -34,7 +35,7 @@ class DetailViewModel @Inject constructor(
     )
     var pokemonStats = _pokemonStats.asStateFlow()
 
-    private var _pokemonTypes = MutableStateFlow<List<String>>(emptyList())
+    private var _pokemonTypes = MutableStateFlow<List<PokemonType>>(emptyList())
     var pokemonTypes = _pokemonTypes.asStateFlow()
 
     private var _pokemonFlavorText = MutableStateFlow(PokemonFlavorText(""))

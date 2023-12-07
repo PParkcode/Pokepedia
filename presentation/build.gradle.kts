@@ -68,6 +68,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("com.google.android.engage:engage-core:1.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -89,6 +90,8 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+    //landscapist
+    implementation("com.github.skydoves:landscapist-coil:1.4.7")
     // palette
     implementation("androidx.palette:palette-ktx:1.0.0")
 
