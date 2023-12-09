@@ -1,6 +1,5 @@
 package com.example.data.mapper
 
-import android.util.Log
 import com.example.data.model.FlavorTextEntry
 import com.example.data.model.PokemonInfoResponse
 import com.example.domain.model.PokemonFlavorText
@@ -81,12 +80,12 @@ fun getPokemonStats(pokemonResponse: PokemonInfoResponse): PokemonStats {
     return PokemonStats(
         height = modifiedHeight,
         weight = modifiedWeight,
-        hp = Stat("HP", hp,0xFFFF0000),
-        atk = Stat("ATK", attack,0xFFF08030),
-        def = Stat("DEF", defense,0xFFF8D030),
-        specialAtk = Stat("SP-ATK", specialAtk,0xFF6890F0),
-        specialDef = Stat("SP-DEF", specialDef,0xFF78C850),
-        speed = Stat("SPD", speed,0xFFF85888)
+        hp = Stat("HP", hp, 0xFFFF0000),
+        atk = Stat("ATK", attack, 0xFFF08030),
+        def = Stat("DEF", defense, 0xFFF8D030),
+        specialAtk = Stat("SP-ATK", specialAtk, 0xFF6890F0),
+        specialDef = Stat("SP-DEF", specialDef, 0xFF78C850),
+        speed = Stat("SPD", speed, 0xFFF85888)
     )
 }
 

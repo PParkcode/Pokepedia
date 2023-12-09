@@ -2,17 +2,10 @@ package com.example.presentation.detail
 
 
 import android.app.Activity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +48,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -180,33 +171,7 @@ fun ImageArea(id: Int) {
         }
 
     }
-}/*
-@Composable
-fun ImageArea(id: Int, modifier: Modifier = Modifier) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
-            .background(Color.Gray)
-
-    ) {
-        Column {
-            Text(
-                text = "NO.$id",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 7.dp, end = 12.dp)
-                    .align(alignment = Alignment.End)
-            )
-            ImageLoader(id = id, { Text("") })
-        }
-
-    }
 }
-
- */
 
 @Composable
 fun NameAndTypeArea(name: String, types: List<PokemonType>, modifier: Modifier = Modifier) {
@@ -306,7 +271,7 @@ fun PokemonFlavorTextArea(flavorText: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun PhysicalArea(weight: String, height: String, modifier: Modifier = Modifier) {
-    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
 
         Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
             Text(
@@ -353,15 +318,15 @@ fun PokemonStatsArea(pokemonStats: PokemonStats, modifier: Modifier = Modifier) 
             text = "기본 스탯",
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
-            modifier = modifier.padding(bottom = 7.dp)
+            modifier = modifier.padding(bottom = 11.dp)
         )
 
-        PokemonStat(pokemonStats.hp, modifier.padding(bottom = 7.dp))
-        PokemonStat(pokemonStats.atk, modifier.padding(bottom = 7.dp))
-        PokemonStat(pokemonStats.def, modifier.padding(bottom = 7.dp))
-        PokemonStat(pokemonStats.specialAtk, modifier.padding(bottom = 7.dp))
-        PokemonStat(pokemonStats.specialDef, modifier.padding(bottom = 7.dp))
-        PokemonStat(pokemonStats.speed, modifier.padding(bottom = 7.dp))
+        PokemonStat(pokemonStats.hp, modifier.padding(bottom = 9.dp))
+        PokemonStat(pokemonStats.atk, modifier.padding(bottom = 9.dp))
+        PokemonStat(pokemonStats.def, modifier.padding(bottom = 9.dp))
+        PokemonStat(pokemonStats.specialAtk, modifier.padding(bottom = 9.dp))
+        PokemonStat(pokemonStats.specialDef, modifier.padding(bottom = 9.dp))
+        PokemonStat(pokemonStats.speed, modifier.padding(bottom = 9.dp))
 
 
     }
@@ -457,6 +422,34 @@ fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
 
 
 }
+
+/*
+@Composable
+fun ImageArea(id: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+            .clip(RoundedCornerShape(bottomEnd = 30.dp, bottomStart = 30.dp))
+            .background(Color.Gray)
+
+    ) {
+        Column {
+            Text(
+                text = "NO.$id",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(top = 7.dp, end = 12.dp)
+                    .align(alignment = Alignment.End)
+            )
+            ImageLoader(id = id, { Text("") })
+        }
+
+    }
+}
+
+ */
 
 
 @Preview(showBackground = true)

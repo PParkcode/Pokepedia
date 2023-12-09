@@ -25,7 +25,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -90,11 +90,11 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.5.0")
-    //landscapist
+    // landscapist
     implementation("com.github.skydoves:landscapist-coil:1.4.7")
     // palette
     implementation("androidx.palette:palette-ktx:1.0.0")
 
-    //navigation
+    // navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
 }

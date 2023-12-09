@@ -5,7 +5,7 @@ buildscript {
     dependencies {
 
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.48")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:11.6.1")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:12.0.2")
     }
     repositories {
         mavenCentral()
@@ -18,5 +18,5 @@ plugins {
     id("com.android.library") version "8.1.3" apply false
 
     // ktlint
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+    id("org.jlleitschuh.gradle.ktlint") version "12.0.2"
 }

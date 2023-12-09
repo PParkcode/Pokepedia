@@ -12,9 +12,9 @@ interface PokemonRepository {
 
     suspend fun getKoreanName(id: Int): Flow<String>
 
-    suspend fun getPokemonStats(id: Int):Flow<PokemonStats>
+    suspend fun getPokemonStats(id: Int): Flow<PokemonStats>
 
-    suspend fun getPokemonTypes(id:Int):Flow<List<PokemonType>>
+    suspend fun getPokemonTypes(id: Int): Flow<List<PokemonType>>
 
     suspend fun getPokemonFlavorText(id: Int): Flow<PokemonFlavorText>
 }

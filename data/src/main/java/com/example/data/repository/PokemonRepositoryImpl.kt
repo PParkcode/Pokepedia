@@ -2,35 +2,21 @@ package com.example.data.repository
 
 import android.util.Log
 import com.example.data.datasource.remote.PokemonRemoteDataSource
-import com.example.data.mapper.getId
 import com.example.data.mapper.getPokemonStats
-import com.example.data.mapper.toCover
 import com.example.data.mapper.toPokemonFlavorText
 import com.example.data.mapper.toPokemonList
 import com.example.data.model.FlavorTextEntry
-import com.example.data.model.Name
 import com.example.data.model.PokemonInfoResponse
-import com.example.data.model.PokemonResponse
-import com.example.domain.model.PokemonCover
 import com.example.domain.model.PokemonFlavorText
 import com.example.domain.model.PokemonList
 import com.example.domain.model.PokemonStats
 import com.example.domain.model.PokemonType
 import com.example.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,7 +51,6 @@ internal class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun getPokemonTypes(id: Int): Flow<List<PokemonType>> {
         val pokemonInfo: Flow<PokemonInfoResponse> = remoteDataSource.getPokemonInfo(id)
-        Log.d("확인", "getPokemonTypes")
         val pokemonTypesFlow: Flow<List<PokemonType>> = pokemonInfo.flatMapConcat { response ->
             flow {
                 val namesList = mutableListOf<PokemonType>()
@@ -75,8 +60,7 @@ internal class PokemonRepositoryImpl @Inject constructor(
                             name.language.name == "ko"
                         }.name
                     }
-
-                    namesList += PokemonType(type.type.name,name.first())
+                    namesList += PokemonType(type.type.name, name.first())
                 }
 
                 emit(namesList)

@@ -20,20 +20,19 @@ class PokemonRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getKoreanName(id: Int): Flow<NamesResponse> = flow {
-         emit(client.getKoreanName(id))
+        emit(client.getKoreanName(id))
     }
 
     override suspend fun getPokemonInfo(id: Int): Flow<PokemonInfoResponse> = flow {
         emit(client.getPokemonInfo(id))
     }
 
-    override suspend fun getPokemonFlavorText(id: Int):Flow<FlavorTextResponse> = flow {
+    override suspend fun getPokemonFlavorText(id: Int): Flow<FlavorTextResponse> = flow {
         emit(client.getFlavorText(id))
     }
 
-    override suspend fun getPokemonType(url:String):Flow<NamesResponse> = flow {
-        val a= client.getType(url)
-        Log.d("확인","type 응답" + a.names)
-        emit(a)
+    override suspend fun getPokemonType(url: String): Flow<NamesResponse> = flow {
+        emit(client.getType(url))
+
     }
 }
