@@ -20,10 +20,15 @@ import com.skydoves.landscapist.coil.CoilImage
 import com.skydoves.landscapist.palette.BitmapPalette
 
 
+/***
+ * URL을 통해 이미지를 불러오는 곳
+ * Home 화면에서와 ,상세화면에서 재사용하려 했지만, 제약사항에 의해 Home 화면에서만 쓰이고 있다.
+ * Image는 .skydoves가 개발한 landscapist를 사용하였다. --> Palette를 이용한 주요 색 추출을 위해
+ */
 @Composable
 fun ImageLoader(id: Int, name:@Composable () -> Unit) {
     var palette by remember { mutableStateOf<Palette?>(null) }
-    var imgUrl =
+    val imgUrl =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
 
     Box(

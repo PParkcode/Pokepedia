@@ -25,7 +25,13 @@ import androidx.compose.ui.unit.sp
 import com.example.domain.model.PokemonCover
 
 
-
+/**
+ * Home 화면에서의 포켓만 카드
+ * 자주 사용될 여지가 있어, Common 디렉토리에 개발
+ *
+ * 먼저 영문 이름을 받아오고, 이후 한글 이름을 받아오는 작업을 진행한다.
+ * 포켓몬 이름을 상태로서 관찰한다.포켓몬 이름이 한글이름으로 갱신되면 리컴포지션이 발생
+ */
 @Composable
 fun PokemonCard(
     item: PokemonCover,

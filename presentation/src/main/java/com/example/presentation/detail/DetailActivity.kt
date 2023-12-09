@@ -62,7 +62,12 @@ import com.skydoves.landscapist.coil.CoilImage
 import com.skydoves.landscapist.palette.BitmapPalette
 import kotlinx.coroutines.launch
 
-
+/**
+ * SetDetailActivity
+ * ViewModel을 생성하고
+ * 네트워크 작업을 통해 포켓몬 정보를 불러와 ViewModel에 데이터를 저장한다.
+ * 이후 받아온 데이터를 통해 DetailActivity 호출
+ */
 @Composable
 fun SetDetailActivity(id: Int, name: String, viewModel: DetailViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
@@ -81,6 +86,7 @@ fun SetDetailActivity(id: Int, name: String, viewModel: DetailViewModel = hiltVi
     }
     DetailActivity(pokemon, pokemonStats, pokemonTypes, pokemonFlavorText)
 }
+
 
 @Composable
 fun DetailActivity(
@@ -127,11 +133,14 @@ fun DetailActivity(
 
 
 }
-
+/**
+ *ImageArea
+ * 상세화면에서 상단의 이미지 뷰를 책임
+ */
 @Composable
 fun ImageArea(id: Int) {
     var palette by remember { mutableStateOf<Palette?>(null) }
-    var imgUrl =
+    val imgUrl =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
     val view = LocalView.current
     val window = (view.context as Activity).window
@@ -173,6 +182,10 @@ fun ImageArea(id: Int) {
     }
 }
 
+/**
+ * NameAndTypeArea
+ * 포켓몬 이름과 타입을 책임
+ */
 @Composable
 fun NameAndTypeArea(name: String, types: List<PokemonType>, modifier: Modifier = Modifier) {
     Row(
@@ -202,7 +215,11 @@ fun NameArea(name: String, modifier: Modifier = Modifier) {
         )
 }
 
-
+/**
+ * TypeArea
+ * 포켓몬은 1개이상 2개 이하의 타입을 가진다.
+ * 받아온 타입을 Row로 보여준다.
+ */
 @Composable
 fun TypeArea(types: List<PokemonType>, modifier: Modifier = Modifier) {
     LazyRow(
@@ -219,6 +236,12 @@ fun TypeArea(types: List<PokemonType>, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Type
+ * PokemonType의 데이터를 통해
+ * 미리 저장해둔 {type}_type.png 파일을 불러온다.
+ * 그리고 이를 아이콘과 한글 이름을 ㅗ매칭
+ */
 @Composable
 fun Type(type: PokemonType, modifier: Modifier = Modifier) {
     val resources = LocalContext.current.resources
@@ -251,6 +274,10 @@ fun Type(type: PokemonType, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * PokemonFlavorTextArea
+ * 포켓몬 설명을 보여주는 영역
+ */
 @Composable
 fun PokemonFlavorTextArea(flavorText: String, modifier: Modifier = Modifier) {
     val text = flavorText.replace("\n", " ")
@@ -268,46 +295,10 @@ fun PokemonFlavorTextArea(flavorText: String, modifier: Modifier = Modifier) {
 
 }
 
-
-@Composable
-fun PhysicalArea(weight: String, height: String, modifier: Modifier = Modifier) {
-    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
-
-        Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
-            Text(
-                text = "$weight KG",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Weight",
-                fontWeight = FontWeight.Bold,
-                fontSize = 13.sp,
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-
-            )
-
-        }
-        Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
-            Text(
-                text = "$height M",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Height",
-                fontWeight = FontWeight.Bold,
-                fontSize = 13.sp,
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-    }
-
-}
+/**
+ * PokemonStatsArea
+ * 포켓몬이 가진 6개의 초기 스탯을 보여주는 영역
+ */
 
 @Composable
 fun PokemonStatsArea(pokemonStats: PokemonStats, modifier: Modifier = Modifier) {
@@ -332,6 +323,11 @@ fun PokemonStatsArea(pokemonStats: PokemonStats, modifier: Modifier = Modifier) 
     }
 }
 
+/**
+ * PokemonStat
+ * 하나의 포켓몬 스탯을 보여주는 영역
+ * 이름과 커스텀 바로 이루어짐
+ */
 @Composable
 fun PokemonStat(stat: Stat, modifier: Modifier = Modifier) {
 
@@ -359,6 +355,12 @@ fun PokemonStat(stat: Stat, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * CustomBar
+ *
+ * 상태를 가로 막대 바로 표현
+ * 애니메이션을 적용했다.
+ */
 @Composable
 fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
     var progress by remember { mutableFloatStateOf(0f) }
@@ -398,6 +400,7 @@ fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
                 .animateContentSize()
                 .then(modifier)
         )
+        // 수치를 Text로 나타내기 위한 Box
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -420,6 +423,50 @@ fun CustomBar(stat: Stat, maxStat: Int, modifier: Modifier = Modifier) {
 
     }
 
+
+}
+
+/**
+ * PhysicalArea
+ * 최 하단의 무게와 신장을 나타내는 영역
+ */
+@Composable
+fun PhysicalArea(weight: String, height: String, modifier: Modifier = Modifier) {
+    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth().padding(top = 7.dp)) {
+
+        Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "$weight KG",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Weight",
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                color = Color.Gray,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+
+            )
+
+        }
+        Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(10.dp)) {
+            Text(
+                text = "$height M",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Height",
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                color = Color.Gray,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        }
+    }
 
 }
 

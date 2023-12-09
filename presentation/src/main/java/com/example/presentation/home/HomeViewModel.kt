@@ -19,6 +19,7 @@ class HomeViewModel @Inject constructor(
     private val getKoreanNameUsecase: GetKoreanNameUsecase
 ) : ViewModel() {
 
+    // 호출할 때 필요한 offset과 limit 정보를 포켓몬 리스틀 불러올 때마다 갱신하여 다음 호출에 사용한다.
     private var offset by mutableIntStateOf(0)
     private var limit by mutableIntStateOf(60)
 

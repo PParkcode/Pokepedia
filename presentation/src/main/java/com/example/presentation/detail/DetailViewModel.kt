@@ -21,6 +21,7 @@ class DetailViewModel @Inject constructor(
     private val getPokemonTypesUsecase: GetPokemonTypesUsecase
 
 ) : ViewModel() {
+
     private var _pokemonStats = MutableStateFlow<PokemonStats>(
         PokemonStats(
             "0",
