@@ -2,7 +2,7 @@
 
 <br/>
 
-<img width="70%" src="https://github.com/PParkcode/Pokepedia/assets/80203360/dcd8afdf-689b-4df4-aa13-f6615ee4d0a6"/>
+<img width="80%" src="https://github.com/PParkcode/Pokepedia/assets/80203360/dcd8afdf-689b-4df4-aa13-f6615ee4d0a6"/>
 
 ![2bc422fd-49e7-4579-97df-e2cccf24d032 (2)](https://github.com/PParkcode/Pokepedia/assets/80203360/936c09e6-608a-4b33-83f7-edebc7b18894)
 
