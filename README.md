@@ -8,7 +8,7 @@
 
 
 ## 소개
-[Skydoves](https://github.com/skydoves) 님의 [Pokedex](https://github.com/skydoves/Pokedex)의 디자인을 참고하여 Compose를 이용해 만든 포켓몬 도감 앱입니다.
+[skydoves](https://github.com/skydoves) 님의 [Pokedex](https://github.com/skydoves/Pokedex)의 디자인을 참고하여 Compose를 이용해 만든 포켓몬 도감 앱입니다.
 
 
 ## 앱 아키텍처
@@ -18,20 +18,22 @@
 - Presentation 
 
 ## 기술 스택
-- Asynchronous
+### Asynchronous
   - Coroutine
   - Flow
-- Jetpack
+### Jetpack
   - Compose
   - ViewModel
   - Navigation
-- DI
+### DI
   - Hilt
-- Network
+### Network
   - Retrofit
   - Moshi
-- ImageLoader
+### ImageLoader
   - Coil
-- Open Source Library
-  - [skydoves:landscapist](https://github.com/skydoves/landscapist) 
+### Open Source Library
+  - [skydoves:landscapist](https://github.com/skydoves/landscapist)
+### Open API
+- [pokeApi](https://pokeapi.co/)
   
